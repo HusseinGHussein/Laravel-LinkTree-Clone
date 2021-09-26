@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateSettingsRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -21,15 +22,10 @@ class UserController extends Controller
         ]);
     }
 
-    public function update(Request $request)
+    public function update(UpdateSettingsRequest $request)
     {
-        $atrributes = $request->validate([
-            'background_color' => ['required', 'size:7', 'starts_with:#'],
-            'text_color' => ['required', 'size:7', 'starts_with:#'],
-        ]);
+        auth()->user()->update($request->validated());
 
-        auth()->user()->update($atrributes);
-
-        return back();
+        return redirect()->route('settings.edit');
     }
 }
